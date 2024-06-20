@@ -1,59 +1,86 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { colors, fontSize } from "@/constants/tokens";
+import { BlurView } from "expo-blur";
+import { Tabs } from "expo-router";
+import { StyleSheet } from "react-native";
+import {
+  FontAwesome,
+  FontAwesome6,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+const TabsNavigation = () => {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
+        tabBarActiveTintColor: colors.primary,
+        tabBarLabelStyle: {
+          fontSize: fontSize.xs,
+          fontWeight: 500,
+        },
+        headerShown: false,
+        tabBarStyle: {
+          position: "absolute",
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          borderTopWidth: 0,
+          paddingTop: 8,
+        },
+        tabBarBackground: () => (
+          <BlurView
+            intensity={95}
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              overflow: "hidden",
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+            }}
+          />
+        ),
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="favorites"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: "Favorites",
+          tabBarIcon: ({ color }) => (
+            <FontAwesome name="heart" size={20} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="playlists"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Playlists",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="playlist-play"
+              size={28}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="(songs)"
+        options={{
+          title: "Songs",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="musical-notes-sharp" size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="artists"
+        options={{
+          title: "Artists",
+          tabBarIcon: ({ color }) => (
+            <FontAwesome6 name="users-line" size={20} color={color} />
+          ),
         }}
       />
     </Tabs>
   );
-}
+};
+
+export default TabsNavigation;
