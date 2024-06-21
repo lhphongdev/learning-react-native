@@ -8,9 +8,10 @@ import {
   View,
   Image,
 } from "react-native";
+import { Track } from "react-native-track-player";
 
 export type TrackListItemProps = {
-  track: { title: string; image?: string; artist?: string };
+  track: Track;
 };
 
 export const TrackListItem = ({ track }: TrackListItemProps) => {
@@ -22,7 +23,7 @@ export const TrackListItem = ({ track }: TrackListItemProps) => {
         <View>
           <Image
             source={{
-              uri: track.image ?? unknownTrackImageUri,
+              uri: track.artwork ?? unknownTrackImageUri,
             }}
             style={{
               ...styles.trackArtworkImage,
